@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<robot name="ur_onrobot" xmlns:xacro="http://ros.org/wiki/xacro">
+    <!-- Arguments -->
+    <xacro:arg name="ur_type" default="ur3e"/>
+    <xacro:arg name="onrobot_type" default="rg2"/>
+    <xacro:arg name="tf_prefix" default=""/>
+    <xacro:arg name="name" default="ur_onrobot"/>
+    <xacro:arg name="joint_limits_parameters_file" default="$(find ur_description)/config/$(arg ur_type)/joint_limits.yaml"/>
+    <xacro:arg name="kinematics_parameters_file" default="$(find ur_description)/config/$(arg ur_type)/default_kinematics.yaml"/>
+    <xacro:arg name="physical_parameters_file" default="$(find ur_description)/config/$(arg ur_type)/physical_parameters.yaml"/>
+    <xacro:arg name="visual_parameters_file" default="$(find ur_description)/config/$(arg ur_type)/visual_parameters.yaml"/>
+
+    <xacro:include filename="$(find ur_onrobot_description)/urdf/ur_onrobot_macro.xacro"/>
+
+    <link name="world"/>
+
+    <!--This will create the scene where the robot is located in-->
+    <xacro:ur_onrobot
+        parent="world"
+        ur_type="$(arg ur_type)"
+        onrobot_type="$(arg onrobot_type)"
+        tf_prefix="$(arg tf_prefix)"
+        joint_limits_parameters_file="$(arg joint_limits_parameters_file)"
+        kinematics_parameters_file="$(arg kinematics_parameters_file)"
+        physical_parameters_file="$(arg physical_parameters_file)"
+        visual_parameters_file="$(arg visual_parameters_file)"
+        >
+        <origin xyz="0 0 1" rpy="0 0 0" />
+    </xacro:ur_onrobot>
+
+</robot>

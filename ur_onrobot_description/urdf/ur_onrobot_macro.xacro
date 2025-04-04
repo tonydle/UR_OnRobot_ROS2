@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find ur_description)/urdf/ur_macro.xacro"/>
+    <xacro:include filename="$(find onrobot_description)/urdf/onrobot_macro.xacro"/>
+
+    <xacro:macro name="ur_onrobot" params="
+        parent
+        *origin
+        ur_type
+        onrobot_type
+        tf_prefix
+        cable_connector:='true'
+        joint_limits_parameters_file
+        kinematics_parameters_file
+        physical_parameters_file
+        visual_parameters_file
+        ">
+
+        <!-- Create the UR robot-->
+        <xacro:ur_robot
+            name="${ur_type}"
+            parent="${parent}"
+            tf_prefix="${tf_prefix}"
+            joint_limits_parameters_file="${joint_limits_parameters_file}"
+            kinematics_parameters_file="${kinematics_parameters_file}"
+            physical_parameters_file="${physical_parameters_file}"
+            visual_parameters_file="${visual_parameters_file}"
+        >
+            <origin xyz="0 0 0" rpy="0 0 0" />
+        </xacro:ur_robot>
+
+        <!--Create the OnRobot model -->
+        <xacro:onrobot onrobot_type="${onrobot_type}" prefix="${tf_prefix}"/>
+
+        <!-- Connect the OnRobot to the UR robot -->
+        <joint name="${tf_prefix}onrobot_base_link_joint" type="fixed">
+            <parent link="${tf_prefix}tool0"/>
+            <child link="${tf_prefix}onrobot_base_link"/>
+            <origin xyz="0 0 0" rpy="0 0 ${-pi/2}"/>
+        </joint>
+
+        <!-- Include cable connector collision links -->
+        <xacro:if value="${cable_connector}">
+            <link name="${tf_prefix}cable_connector_0">
+                <collision>
+                <geometry>
+                    <sphere radius="0.02"/>
+                </geometry>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                </collision>
+            </link>
+            <joint name="${tf_prefix}cable_connector_0_joint" type="fixed">
+                <parent link="${tf_prefix}onrobot_base_link"/>
+                <child link="${tf_prefix}cable_connector_0"/>
+                <origin xyz="0 -0.035 0.01" rpy="0 0 0"/>
+            </joint>
+
+            <link name="${tf_prefix}cable_connector_1">
+                <collision>
+                <geometry>
+                    <sphere radius="0.02"/>
+                </geometry>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                </collision>
+            </link>
+            <joint name="${tf_prefix}cable_connector_1_joint" type="fixed">
+                <parent link="${tf_prefix}onrobot_base_link"/>
+                <child link="${tf_prefix}cable_connector_1"/>
+                <origin xyz="0.03 0.0 -0.03" rpy="0 0 0"/>
+            </joint>
+        </xacro:if>
+    </xacro:macro>
+</robot>
