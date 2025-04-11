@@ -10,7 +10,8 @@
         ur_type
         onrobot_type
         tf_prefix
-        cable_connector:='true'
+        use_fake_hardware:=false
+        cable_connector:=true
         joint_limits_parameters_file
         kinematics_parameters_file
         physical_parameters_file
@@ -22,6 +23,7 @@
             name="${ur_type}"
             parent="${parent}"
             tf_prefix="${tf_prefix}"
+            use_fake_hardware="${use_fake_hardware}"
             joint_limits_parameters_file="${joint_limits_parameters_file}"
             kinematics_parameters_file="${kinematics_parameters_file}"
             physical_parameters_file="${physical_parameters_file}"
@@ -31,7 +33,11 @@
         </xacro:ur_robot>
 
         <!--Create the OnRobot model -->
-        <xacro:onrobot onrobot_type="${onrobot_type}" prefix="${tf_prefix}"/>
+        <xacro:onrobot
+            onrobot_type="${onrobot_type}"
+            prefix="${tf_prefix}"
+            use_fake_hardware="${use_fake_hardware}"
+        />
 
         <!-- Connect the OnRobot to the UR robot -->
         <joint name="${tf_prefix}onrobot_base_link_joint" type="fixed">

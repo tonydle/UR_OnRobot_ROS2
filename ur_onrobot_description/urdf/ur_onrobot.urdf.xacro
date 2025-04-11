@@ -5,6 +5,7 @@
     <xacro:arg name="onrobot_type" default="rg2"/>
     <xacro:arg name="tf_prefix" default=""/>
     <xacro:arg name="name" default="ur_onrobot"/>
+    <xacro:arg name="use_fake_hardware" default="false"/>
     <xacro:arg name="joint_limits_parameters_file" default="$(find ur_description)/config/$(arg ur_type)/joint_limits.yaml"/>
     <xacro:arg name="kinematics_parameters_file" default="$(find ur_description)/config/$(arg ur_type)/default_kinematics.yaml"/>
     <xacro:arg name="physical_parameters_file" default="$(find ur_description)/config/$(arg ur_type)/physical_parameters.yaml"/>
@@ -20,6 +21,7 @@
         ur_type="$(arg ur_type)"
         onrobot_type="$(arg onrobot_type)"
         tf_prefix="$(arg tf_prefix)"
+        use_fake_hardware="$(arg use_fake_hardware)"
         joint_limits_parameters_file="$(arg joint_limits_parameters_file)"
         kinematics_parameters_file="$(arg kinematics_parameters_file)"
         physical_parameters_file="$(arg physical_parameters_file)"
