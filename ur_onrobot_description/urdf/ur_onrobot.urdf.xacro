@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <robot name="ur_onrobot" xmlns:xacro="http://ros.org/wiki/xacro">
     <!-- Arguments -->
+    <xacro:arg name="robot_ip" default="192.168.56.101"/>
     <xacro:arg name="ur_type" default="ur3e"/>
     <xacro:arg name="onrobot_type" default="rg2"/>
     <xacro:arg name="tf_prefix" default=""/>
@@ -10,6 +11,9 @@
     <xacro:arg name="kinematics_parameters_file" default="$(find ur_description)/config/$(arg ur_type)/default_kinematics.yaml"/>
     <xacro:arg name="physical_parameters_file" default="$(find ur_description)/config/$(arg ur_type)/physical_parameters.yaml"/>
     <xacro:arg name="visual_parameters_file" default="$(find ur_description)/config/$(arg ur_type)/visual_parameters.yaml"/>
+    <xacro:arg name="script_filename" default="$(find ur_client_library)/resources/external_control.urscript"/>
+    <xacro:arg name="input_recipe_filename" default="$(find ur_robot_driver)/resources/rtde_input_recipe.txt"/>
+    <xacro:arg name="output_recipe_filename" default="$(find ur_robot_driver)/resources/rtde_output_recipe.txt"/>
 
     <xacro:include filename="$(find ur_onrobot_description)/urdf/ur_onrobot_macro.xacro"/>
 
@@ -18,6 +22,7 @@
     <!--This will create the scene where the robot is located in-->
     <xacro:ur_onrobot
         parent="world"
+        robot_ip="$(arg robot_ip)"
         ur_type="$(arg ur_type)"
         onrobot_type="$(arg onrobot_type)"
         tf_prefix="$(arg tf_prefix)"
@@ -26,6 +31,9 @@
         kinematics_parameters_file="$(arg kinematics_parameters_file)"
         physical_parameters_file="$(arg physical_parameters_file)"
         visual_parameters_file="$(arg visual_parameters_file)"
+        script_filename="$(arg script_filename)"
+        output_recipe_filename="$(arg output_recipe_filename)"
+        input_recipe_filename="$(arg input_recipe_filename)"
         >
         <origin xyz="0 0 1" rpy="0 0 0" />
     </xacro:ur_onrobot>

@@ -21,9 +21,6 @@ def launch_setup(context, *args, **kwargs):
     onrobot_type = LaunchConfiguration("onrobot_type")
     robot_ip = LaunchConfiguration("robot_ip")
 
-    # General arguments
-    runtime_config_package = LaunchConfiguration("runtime_config_package")
-
     tf_prefix = LaunchConfiguration("tf_prefix")
     use_fake_hardware = LaunchConfiguration("use_fake_hardware")
 
@@ -33,16 +30,15 @@ def launch_setup(context, *args, **kwargs):
     launch_rviz = LaunchConfiguration("launch_rviz")
     headless_mode = LaunchConfiguration("headless_mode")
     launch_dashboard_client = LaunchConfiguration("launch_dashboard_client")
-    use_tool_communication = LaunchConfiguration("use_tool_communication")
-
-    tool_device_name = LaunchConfiguration("tool_device_name")
-    tool_tcp_port = LaunchConfiguration("tool_tcp_port")
 
     robot_description_content = Command(
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution([FindPackageShare('ur_onrobot_description'), "urdf", 'ur_onrobot.urdf.xacro']),
+            " ",
+            "robot_ip:=",
+            robot_ip,
             " ",
             "ur_type:=",
             ur_type,
@@ -76,7 +72,7 @@ def launch_setup(context, *args, **kwargs):
     # define update rate
     update_rate_config_file = PathJoinSubstitution(
         [
-            FindPackageShare(runtime_config_package),
+            FindPackageShare("ur_robot_driver"),
             "config",
             ur_type.perform(context) + "_update_rate.yaml",
         ]
@@ -130,15 +126,14 @@ def launch_setup(context, *args, **kwargs):
 
     tool_communication_node = Node(
         package="ur_robot_driver",
-        condition=IfCondition(use_tool_communication),
         executable="tool_communication.py",
         name="ur_tool_comm",
         output="screen",
         parameters=[
             {
                 "robot_ip": robot_ip,
-                "tcp_port": tool_tcp_port,
-                "device_name": tool_device_name,
+                "tcp_port": 54321,
+                "device_name": "/tmp/ttyUR",
             }
         ],
     )
@@ -212,11 +207,10 @@ def launch_setup(context, *args, **kwargs):
         "force_torque_sensor_broadcaster",
         "tcp_pose_broadcaster",
         "ur_configuration_controller",
-        "finger_width_trajectory_controller",
+        "finger_width_controller",
     ]
     controllers_inactive = [
         "scaled_joint_trajectory_controller",
-        "finger_width_controller",
         "joint_trajectory_controller",
         "forward_velocity_controller",
         "forward_position_controller",
@@ -277,58 +271,7 @@ def generate_launch_description():
             default_value="192.168.56.101",  # Uses the Polyscope sim by default
         )
     )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "safety_limits",
-            default_value="true",
-            description="Enables the safety limits controller if true.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "safety_pos_margin",
-            default_value="0.15",
-            description="The margin to lower and upper limits in the safety controller.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "safety_k_position",
-            default_value="20",
-            description="k-position factor in the safety controller.",
-        )
-    )
-    # General arguments
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "runtime_config_package",
-            default_value="ur_robot_driver",
-            description='Package with the controller\'s configuration in "config" folder. '
-            "Usually the argument is not set, it enables use of a custom setup.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "description_package",
-            default_value="ur_description",
-            description="Description package with robot URDF/XACRO files. Usually the argument "
-            "is not set, it enables use of a custom description.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "kinematics_params_file",
-            default_value=PathJoinSubstitution(
-                [
-                    FindPackageShare(LaunchConfiguration("description_package")),
-                    "config",
-                    LaunchConfiguration("ur_type"),
-                    "default_kinematics.yaml",
-                ]
-            ),
-            description="The calibration configuration of the actual robot used.",
-        )
-    )
+
     declared_arguments.append(
         DeclareLaunchArgument(
             "tf_prefix",
@@ -343,14 +286,6 @@ def generate_launch_description():
             "use_fake_hardware",
             default_value="false",
             description="Start robot with fake hardware mirroring command to its states.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "fake_sensor_commands",
-            default_value="false",
-            description="Enable fake command interfaces for sensors used for simple simulations. "
-            "Used only if 'use_fake_hardware' parameter is true.",
         )
     )
     declared_arguments.append(
@@ -395,112 +330,6 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "launch_dashboard_client", default_value="true", description="Launch Dashboard Client?"
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "use_tool_communication",
-            default_value="false",
-            description="Only available for e series!",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "tool_parity",
-            default_value="0",
-            description="Parity configuration for serial communication. Only effective, if "
-            "use_tool_communication is set to True.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "tool_baud_rate",
-            default_value="115200",
-            description="Baud rate configuration for serial communication. Only effective, if "
-            "use_tool_communication is set to True.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "tool_stop_bits",
-            default_value="1",
-            description="Stop bits configuration for serial communication. Only effective, if "
-            "use_tool_communication is set to True.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "tool_rx_idle_chars",
-            default_value="1.5",
-            description="RX idle chars configuration for serial communication. Only effective, "
-            "if use_tool_communication is set to True.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "tool_tx_idle_chars",
-            default_value="3.5",
-            description="TX idle chars configuration for serial communication. Only effective, "
-            "if use_tool_communication is set to True.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "tool_device_name",
-            default_value="/tmp/ttyUR",
-            description="File descriptor that will be generated for the tool communication device. "
-            "The user has be be allowed to write to this location. "
-            "Only effective, if use_tool_communication is set to True.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "tool_tcp_port",
-            default_value="54321",
-            description="Remote port that will be used for bridging the tool's serial device. "
-            "Only effective, if use_tool_communication is set to True.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "tool_voltage",
-            default_value="0",  # 0 being a conservative value that won't destroy anything
-            description="Tool voltage that will be setup.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "reverse_ip",
-            default_value="0.0.0.0",
-            description="IP that will be used for the robot controller to communicate back to the driver.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "script_command_port",
-            default_value="50004",
-            description="Port that will be opened to forward URScript commands to the robot.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "reverse_port",
-            default_value="50001",
-            description="Port that will be opened to send cyclic instructions from the driver to the robot controller.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "script_sender_port",
-            default_value="50002",
-            description="The driver will offer an interface to query the external_control URScript on this port.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "trajectory_port",
-            default_value="50003",
-            description="Port that will be opened for trajectory control.",
         )
     )
     return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])

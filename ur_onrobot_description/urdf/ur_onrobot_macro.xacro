@@ -7,6 +7,7 @@
     <xacro:macro name="ur_onrobot" params="
         parent
         *origin
+        robot_ip
         ur_type
         onrobot_type
         tf_prefix
@@ -16,10 +17,14 @@
         kinematics_parameters_file
         physical_parameters_file
         visual_parameters_file
+        script_filename
+        output_recipe_filename
+        input_recipe_filename
         ">
 
         <!-- Create the UR robot-->
         <xacro:ur_robot
+            robot_ip="${robot_ip}"
             name="${ur_type}"
             parent="${parent}"
             tf_prefix="${tf_prefix}"
@@ -28,6 +33,9 @@
             kinematics_parameters_file="${kinematics_parameters_file}"
             physical_parameters_file="${physical_parameters_file}"
             visual_parameters_file="${visual_parameters_file}"
+            script_filename="${script_filename}"
+            output_recipe_filename="${output_recipe_filename}"
+            input_recipe_filename="${input_recipe_filename}"
         >
             <origin xyz="0 0 0" rpy="0 0 0" />
         </xacro:ur_robot>
