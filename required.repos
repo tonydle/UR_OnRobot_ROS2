@@ -1,5 +1,5 @@
 repositories:
-  onrobot_driver
+  onrobot_driver:
     type: git
     url: https://github.com/tonydle/OnRobot_ROS2_Driver.git
     version: main

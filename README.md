@@ -76,7 +76,7 @@ ROS2 package for Universal Robot e-Series mounted with OnRobot grippers.
 
 ### Start robot
    ```sh
-   ros2 launch ur_onrobot_control start_robot.launch.py ur_type:=rg2 onrobot_type:=rg2 robot_ip:=<robot_ip>
+   ros2 launch ur_onrobot_control start_robot.launch.py ur_type:=ur3e onrobot_type:=rg2 robot_ip:=<robot_ip>
    ```
 Other arguments:
 - `use_fake_hardware` (default: `false`): Use mock hardware interface for testing
