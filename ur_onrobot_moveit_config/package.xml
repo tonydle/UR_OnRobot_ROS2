@@ -30,6 +30,7 @@
   <exec_depend>moveit_servo</exec_depend>
   <exec_depend>moveit_simple_controller_manager</exec_depend>
   <exec_depend>rviz2</exec_depend>
+  <exec_depend>ur_onrobot_control</exec_depend>
   <exec_depend>ur_onrobot_description</exec_depend>
   <exec_depend>ur_description</exec_depend>
   <exec_depend>onrobot_description</exec_depend>

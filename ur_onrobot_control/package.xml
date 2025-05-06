@@ -2,10 +2,10 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>ur_onrobot_control</name>
-  <version>1.0.0</version>
-  <description>ros2_control setup</description>
-  <maintainer email="Durchdewald@fzi.de">Felix Durchdewald</maintainer>
-  <license file="LICENSE">BSD-3-Clause</license>
+  <version>0.0.1</version>
+  <description>UR OnRobot control package</description>
+  <maintainer email="tonyle98@outlook.com">Tony Le</maintainer>
+  <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
@@ -16,6 +16,7 @@
   <exec_depend>ur_onrobot_description</exec_depend>
   <exec_depend>ur_controllers</exec_depend>
   <exec_depend>ur_robot_driver</exec_depend>
+  <exec_depend>onrobot_driver</exec_depend>
   <exec_depend>ur_client_library</exec_depend>
   <exec_depend>xacro</exec_depend>
   <exec_depend>controller_manager</exec_depend>
