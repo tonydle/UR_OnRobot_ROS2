@@ -59,7 +59,7 @@
             <link name="${tf_prefix}cable_connector_0">
                 <collision>
                 <geometry>
-                    <sphere radius="0.02"/>
+                    <sphere radius="0.03"/>
                 </geometry>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
                 </collision>
@@ -73,7 +73,7 @@
             <link name="${tf_prefix}cable_connector_1">
                 <collision>
                 <geometry>
-                    <sphere radius="0.02"/>
+                    <sphere radius="0.03"/>
                 </geometry>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
                 </collision>
