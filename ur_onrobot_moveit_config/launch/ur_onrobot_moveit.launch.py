@@ -230,6 +230,7 @@ def launch_setup(context, *args, **kwargs):
             planning_scene_monitor_parameters,
             {"use_sim_time": use_sim_time},
             warehouse_ros_config,
+            {"capabilities": "move_group/ExecuteTaskSolutionCapability"}
         ],
     )
 

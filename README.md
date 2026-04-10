@@ -92,10 +92,6 @@ Other arguments:
    ```sh
    ros2 topic echo /joint_states
    ```
-### Control the gripper with `finger_width_controller`(JointGroupPositionController)
-   ```sh
-   ros2 topic pub --once /finger_width_controller/commands std_msgs/msg/Float64MultiArray "{data: [0.05]}"
-   ```
 
 ## Author
 [Tony Le](https://github.com/tonydle)
